@@ -8,6 +8,79 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-gray-50 text-foreground;
+  }
+}
+
+:root {
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+}
+
+.text-success {
+  color: var(--success);
+}
+
+.text-warning {
+  color: var(--warning);
+}
+
+.text-error {
+  color: var(--error);
+}
+
+.bg-success {
+  background-color: var(--success);
+}
+
+.bg-warning {
+  background-color: var(--warning);
+}
+
+.bg-error {
+  background-color: var(--error);
+}
+
+/* Custom breakpoint for extra small devices */
+@media (min-width: 480px) {
+  .xs\:inline {
+    display: inline;
+  }
+  
+  .xs\:hidden {
+    display: none;
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Responsive font size adjustments */
+@media (max-width: 640px) {
+  .text-xs-mobile {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+  
+  .text-sm-mobile {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+/* Improve tap targets on mobile */
+@media (max-width: 640px) {
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
   }
 }

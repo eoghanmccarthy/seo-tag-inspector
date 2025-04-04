@@ -27,12 +27,15 @@ export default function SeoScoreOverview({ score, scoreCategory }: SeoScoreOverv
   const scoreColor = getScoreColor(score);
   const scoreLabel = getScoreLabel(score);
 
+  // Calculate total tags for percentage
+  const totalTags = scoreCategory.good + scoreCategory.improvements + scoreCategory.issues;
+
   return (
-    <section className="bg-white rounded-lg shadow-sm p-6">
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold">SEO Health Score</h2>
-        <div className="flex items-center mt-4 sm:mt-0">
-          <div className="w-32 h-32 relative">
+    <section className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 md:mb-0">SEO Health Score</h2>
+        <div className="flex items-center">
+          <div className="w-24 h-24 md:w-32 md:h-32 relative">
             {/* SVG Circle Progress */}
             <svg className="w-full h-full" viewBox="0 0 36 36">
               <path
@@ -52,52 +55,52 @@ export default function SeoScoreOverview({ score, scoreCategory }: SeoScoreOverv
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center flex-col">
-              <span className="text-2xl font-bold text-gray-800">{score}%</span>
+              <span className="text-xl md:text-2xl font-bold text-gray-800">{score}%</span>
               <span className="text-xs text-gray-500">{scoreLabel}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid sm:grid-cols-3 gap-4">
-        <div className="bg-green-50 p-4 rounded-lg border border-green-100">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+        <div className="bg-green-50 p-3 md:p-4 rounded-lg border border-green-100">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-600">Good</span>
+            <span className="text-xs md:text-sm font-medium text-gray-600">Good</span>
             <span className="font-semibold text-success">{scoreCategory.good}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
             <div 
               className="bg-success h-1.5 rounded-full" 
               style={{ 
-                width: `${Math.round((scoreCategory.good / (scoreCategory.good + scoreCategory.improvements + scoreCategory.issues)) * 100)}%` 
+                width: totalTags > 0 ? `${Math.round((scoreCategory.good / totalTags) * 100)}%` : '0%'
               }}
             ></div>
           </div>
         </div>
-        <div className="bg-amber-50 p-4 rounded-lg border border-amber-100">
+        <div className="bg-amber-50 p-3 md:p-4 rounded-lg border border-amber-100">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-600">Improvements</span>
+            <span className="text-xs md:text-sm font-medium text-gray-600">Improvements</span>
             <span className="font-semibold text-warning">{scoreCategory.improvements}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
             <div 
               className="bg-warning h-1.5 rounded-full" 
               style={{ 
-                width: `${Math.round((scoreCategory.improvements / (scoreCategory.good + scoreCategory.improvements + scoreCategory.issues)) * 100)}%` 
+                width: totalTags > 0 ? `${Math.round((scoreCategory.improvements / totalTags) * 100)}%` : '0%'
               }}
             ></div>
           </div>
         </div>
-        <div className="bg-red-50 p-4 rounded-lg border border-red-100">
+        <div className="bg-red-50 p-3 md:p-4 rounded-lg border border-red-100">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-600">Issues</span>
+            <span className="text-xs md:text-sm font-medium text-gray-600">Issues</span>
             <span className="font-semibold text-error">{scoreCategory.issues}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
             <div 
               className="bg-error h-1.5 rounded-full" 
               style={{ 
-                width: `${Math.round((scoreCategory.issues / (scoreCategory.good + scoreCategory.improvements + scoreCategory.issues)) * 100)}%` 
+                width: totalTags > 0 ? `${Math.round((scoreCategory.issues / totalTags) * 100)}%` : '0%'
               }}
             ></div>
           </div>

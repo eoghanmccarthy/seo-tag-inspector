@@ -15,44 +15,47 @@ export default function TabNavigation({ analysisResult }: TabNavigationProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm">
       <div className="border-b border-gray-200">
-        <nav className="flex -mb-px overflow-x-auto" aria-label="Tabs">
+        <nav className="flex -mb-px overflow-x-auto scrollbar-hide" aria-label="Tabs">
           <button 
-            className={`px-4 py-4 text-center border-b-2 font-medium text-sm sm:text-base whitespace-nowrap flex-1 sm:flex-none ${
+            className={`min-w-[100px] px-3 md:px-4 py-3 md:py-4 text-center border-b-2 font-medium text-xs sm:text-sm md:text-base whitespace-nowrap flex-1 ${
               activeTab === 'previews' 
                 ? 'text-primary border-primary' 
                 : 'text-gray-500 hover:text-gray-700 border-transparent'
             }`}
             onClick={() => setActiveTab('previews')}
           >
-            <Eye className="inline-block mr-2 h-4 w-4" />
-            Previews
+            <Eye className="inline-block mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
+            <span className="hidden xs:inline">Previews</span>
+            <span className="xs:hidden">View</span>
           </button>
           <button 
-            className={`px-4 py-4 text-center border-b-2 font-medium text-sm sm:text-base whitespace-nowrap flex-1 sm:flex-none ${
+            className={`min-w-[100px] px-3 md:px-4 py-3 md:py-4 text-center border-b-2 font-medium text-xs sm:text-sm md:text-base whitespace-nowrap flex-1 ${
               activeTab === 'meta-tags' 
                 ? 'text-primary border-primary' 
                 : 'text-gray-500 hover:text-gray-700 border-transparent'
             }`}
             onClick={() => setActiveTab('meta-tags')}
           >
-            <Code className="inline-block mr-2 h-4 w-4" />
-            Meta Tags
+            <Code className="inline-block mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
+            <span className="hidden xs:inline">Meta Tags</span>
+            <span className="xs:hidden">Tags</span>
           </button>
           <button 
-            className={`px-4 py-4 text-center border-b-2 font-medium text-sm sm:text-base whitespace-nowrap flex-1 sm:flex-none ${
+            className={`min-w-[100px] px-3 md:px-4 py-3 md:py-4 text-center border-b-2 font-medium text-xs sm:text-sm md:text-base whitespace-nowrap flex-1 ${
               activeTab === 'recommendations' 
                 ? 'text-primary border-primary' 
                 : 'text-gray-500 hover:text-gray-700 border-transparent'
             }`}
             onClick={() => setActiveTab('recommendations')}
           >
-            <Lightbulb className="inline-block mr-2 h-4 w-4" />
-            Recommendations
+            <Lightbulb className="inline-block mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
+            <span className="hidden xs:inline">Recommendations</span>
+            <span className="xs:hidden">Tips</span>
           </button>
         </nav>
       </div>
       
-      <div className="p-6">
+      <div className="p-3 sm:p-4 md:p-6">
         {activeTab === 'previews' && <PreviewsTab analysisResult={analysisResult} />}
         {activeTab === 'meta-tags' && <MetaTagsTab 
           metaTags={analysisResult.metaTags}

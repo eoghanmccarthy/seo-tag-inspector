@@ -74,11 +74,11 @@ export default function MetaTagsTab({ metaTags, openGraphTags, twitterCardTags }
         : `<meta name="${tag.name}" content="${tag.content}">`;
 
     return (
-      <div key={tag.name} className="p-4 hover:bg-gray-100 transition">
+      <div key={tag.name} className="p-3 sm:p-4 hover:bg-gray-100 transition">
         <div className="flex justify-between items-start mb-2">
-          <div className="flex items-center">
-            <span className="font-medium text-gray-700">{tag.name}</span>
-            <span className={`ml-2 text-xs py-0.5 px-2 rounded-full ${
+          <div className="flex items-center flex-wrap pr-2">
+            <span className="font-medium text-gray-700 text-sm sm:text-base mr-2">{tag.name}</span>
+            <span className={`mt-1 sm:mt-0 text-xs py-0.5 px-2 rounded-full ${
               isPresent 
                 ? 'bg-success/10 text-success' 
                 : tag.status === 'warning'
@@ -90,7 +90,7 @@ export default function MetaTagsTab({ metaTags, openGraphTags, twitterCardTags }
           </div>
           {isPresent && (
             <button 
-              className={`text-gray-400 hover:text-gray-600 ${copiedTags.has(tag.name) ? 'text-success' : ''}`} 
+              className={`ml-2 text-gray-400 hover:text-gray-600 tap-target p-1 ${copiedTags.has(tag.name) ? 'text-success' : ''}`} 
               title="Copy" 
               onClick={() => handleCopyTag(tag.name, tag.content)}
             >
@@ -98,7 +98,7 @@ export default function MetaTagsTab({ metaTags, openGraphTags, twitterCardTags }
             </button>
           )}
         </div>
-        <div className={`font-mono text-sm bg-white p-2 border rounded overflow-x-auto ${
+        <div className={`font-mono text-xs sm:text-sm bg-white p-2 border rounded overflow-x-auto ${
           isPresent 
             ? 'border-gray-200' 
             : tag.status === 'warning'
@@ -108,13 +108,13 @@ export default function MetaTagsTab({ metaTags, openGraphTags, twitterCardTags }
           <code className={isPresent ? '' : 'text-gray-400'}>{tagHtml}</code>
         </div>
         {!isPresent && (
-          <div className={`mt-2 text-sm ${
+          <div className={`mt-2 text-xs sm:text-sm ${
             tag.status === 'warning' ? 'text-warning' : 'text-error'
           }`}>
             <div className="flex items-start">
               {tag.status === 'warning' 
-                ? <Info className="h-4 w-4 mr-1 mt-0.5" /> 
-                : <AlertTriangle className="h-4 w-4 mr-1 mt-0.5" />}
+                ? <Info className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 mt-0.5 flex-shrink-0" /> 
+                : <AlertTriangle className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 mt-0.5 flex-shrink-0" />}
               <span>
                 {tag.name === 'title' && 'Missing title tag may severely impact SEO.'}
                 {tag.name === 'description' && 'Missing meta description reduces click-through rates.'}
@@ -137,29 +137,29 @@ export default function MetaTagsTab({ metaTags, openGraphTags, twitterCardTags }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium text-gray-900">Meta Tags Overview</h3>
+        <h3 className="text-base sm:text-lg font-medium text-gray-900">Meta Tags Overview</h3>
         <button 
-          className="text-sm text-primary flex items-center gap-1"
+          className="text-xs sm:text-sm text-primary flex items-center gap-1 tap-target p-1"
           onClick={handleCopyAllTags}
         >
-          <Copy className="h-4 w-4" />
+          <Copy className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           <span>Copy All</span>
         </button>
       </div>
 
       {/* Meta Tag Categories */}
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Essential Meta Tags */}
         <div>
-          <h4 className="text-md font-medium mb-3 flex items-center">
-            <span className={`text-white p-1 rounded mr-2 text-xs ${
+          <h4 className="text-sm sm:text-md font-medium mb-2 sm:mb-3 flex items-center">
+            <span className={`text-white p-0.5 sm:p-1 rounded mr-1.5 sm:mr-2 text-xs ${
               essentialStatus === 'success' ? 'bg-success' : 
               essentialStatus === 'warning' ? 'bg-warning' : 'bg-error'
             }`}>
-              {essentialStatus === 'success' ? <Check className="h-4 w-4" /> : 
-               essentialStatus === 'warning' ? <AlertTriangle className="h-4 w-4" /> : <X className="h-4 w-4" />}
+              {essentialStatus === 'success' ? <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : 
+               essentialStatus === 'warning' ? <AlertTriangle className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
             </span>
             Essential Meta Tags
           </h4>
@@ -172,13 +172,13 @@ export default function MetaTagsTab({ metaTags, openGraphTags, twitterCardTags }
 
         {/* Open Graph Tags */}
         <div>
-          <h4 className="text-md font-medium mb-3 flex items-center">
-            <span className={`text-white p-1 rounded mr-2 text-xs ${
+          <h4 className="text-sm sm:text-md font-medium mb-2 sm:mb-3 flex items-center">
+            <span className={`text-white p-0.5 sm:p-1 rounded mr-1.5 sm:mr-2 text-xs ${
               ogStatus === 'success' ? 'bg-success' : 
               ogStatus === 'warning' ? 'bg-warning' : 'bg-error'
             }`}>
-              {ogStatus === 'success' ? <Check className="h-4 w-4" /> : 
-               ogStatus === 'warning' ? <AlertTriangle className="h-4 w-4" /> : <X className="h-4 w-4" />}
+              {ogStatus === 'success' ? <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : 
+               ogStatus === 'warning' ? <AlertTriangle className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
             </span>
             Open Graph Tags
           </h4>
@@ -191,13 +191,13 @@ export default function MetaTagsTab({ metaTags, openGraphTags, twitterCardTags }
 
         {/* Twitter Card Tags */}
         <div>
-          <h4 className="text-md font-medium mb-3 flex items-center">
-            <span className={`text-white p-1 rounded mr-2 text-xs ${
+          <h4 className="text-sm sm:text-md font-medium mb-2 sm:mb-3 flex items-center">
+            <span className={`text-white p-0.5 sm:p-1 rounded mr-1.5 sm:mr-2 text-xs ${
               twitterStatus === 'success' ? 'bg-success' : 
               twitterStatus === 'warning' ? 'bg-warning' : 'bg-error'
             }`}>
-              {twitterStatus === 'success' ? <Check className="h-4 w-4" /> : 
-               twitterStatus === 'warning' ? <AlertTriangle className="h-4 w-4" /> : <X className="h-4 w-4" />}
+              {twitterStatus === 'success' ? <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : 
+               twitterStatus === 'warning' ? <AlertTriangle className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
             </span>
             Twitter Card Tags
           </h4>
