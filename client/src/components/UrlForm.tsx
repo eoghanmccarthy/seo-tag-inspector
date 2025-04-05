@@ -20,17 +20,24 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
   const [error, setError] = useState("");
 
   const validateUrl = (value: string) => {
-    const simpleDomainRegex = /^([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-    const fullUrlRegex = /^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+    // Simplified validation - just check if there's at least one dot
+    // and the domain doesn't start or end with a dot
+    const basicDomainCheck = /^(?!\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}(?!\.)$/;
+    const protocolCheck = /^https?:\/\//;
     
     if (!value.trim()) {
       setError("URL is required");
       return false;
     }
     
-    // Accept either domain-only format or full URL format
-    if (!simpleDomainRegex.test(value) && !fullUrlRegex.test(value)) {
-      setError("Please enter a valid domain (example.com) or full URL");
+    // Remove protocol if present for domain check
+    const domainPart = protocolCheck.test(value) 
+      ? value.replace(protocolCheck, '')
+      : value;
+    
+    // Simple check if it has a valid TLD pattern
+    if (!basicDomainCheck.test(domainPart)) {
+      setError("Please enter a valid domain like example.com");
       return false;
     }
     
@@ -63,7 +70,7 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
               </svg>
             </div>
             <Input
-              type="url"
+              type="text"
               id="url-input"
               placeholder="example.com"
               className="pl-10 text-sm md:text-base h-10 md:h-11 tap-target"
