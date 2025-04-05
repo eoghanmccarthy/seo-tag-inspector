@@ -20,15 +20,17 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
   const [error, setError] = useState("");
 
   const validateUrl = (value: string) => {
-    const urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+    const simpleDomainRegex = /^([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+    const fullUrlRegex = /^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
     
     if (!value.trim()) {
       setError("URL is required");
       return false;
     }
     
-    if (!urlRegex.test(value)) {
-      setError("Please enter a valid URL including http:// or https://");
+    // Accept either domain-only format or full URL format
+    if (!simpleDomainRegex.test(value) && !fullUrlRegex.test(value)) {
+      setError("Please enter a valid domain (example.com) or full URL");
       return false;
     }
     
@@ -40,7 +42,12 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
     e.preventDefault();
     
     if (validateUrl(url)) {
-      onAnalyze(url);
+      // Automatically prepend https:// if not already present
+      const formattedUrl = url.startsWith('http://') || url.startsWith('https://') 
+        ? url 
+        : `https://${url}`;
+      
+      onAnalyze(formattedUrl);
     }
   };
 
@@ -58,7 +65,7 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
             <Input
               type="url"
               id="url-input"
-              placeholder="https://example.com"
+              placeholder="example.com"
               className="pl-10 text-sm md:text-base h-10 md:h-11 tap-target"
               value={url}
               onChange={(e) => {

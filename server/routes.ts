@@ -29,7 +29,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         headers: {
           'User-Agent': 'Mozilla/5.0 (compatible; SEOMetaAnalyzer/1.0;)'
         },
-        timeout: 10000
+        timeout: 15000,
+        maxRedirects: 5
       });
       
       const html = response.data;
