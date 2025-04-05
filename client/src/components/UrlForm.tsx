@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
@@ -18,10 +18,10 @@ interface UrlFormProps {
 export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoading }: UrlFormProps) {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const validateUrl = (value: string) => {
-    // Simplified validation - just check if there's at least one dot
-    // and the domain doesn't start or end with a dot
+    // Simplified validation for domain part only
     const basicDomainCheck = /^(?!\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}(?!\.)$/;
     const protocolCheck = /^https?:\/\//;
     
@@ -30,7 +30,7 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
       return false;
     }
     
-    // Always remove protocol for domain check since our UI now handles it
+    // Always remove protocol for domain check
     const domainPart = value.replace(protocolCheck, '');
     
     // Simple check if it has a valid TLD pattern
@@ -47,11 +47,23 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
     e.preventDefault();
     
     if (validateUrl(url)) {
-      // Since we're storing the URL without protocol in state and displaying https:// in the UI,
-      // we now always prepend https://
-      const formattedUrl = `https://${url.replace(/^https?:\/\//, '')}`;
+      // Ensure clean domain part without protocol
+      const cleanDomain = url.replace(/^https?:\/\//, '');
+      // Always use https protocol for analysis
+      const formattedUrl = `https://${cleanDomain}`;
       
       onAnalyze(formattedUrl);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Remove any protocol prefix from input and store just the domain
+    const inputValue = e.target.value;
+    const cleanValue = inputValue.replace(/^https?:\/\//, '');
+    setUrl(cleanValue);
+    
+    if (error) {
+      validateUrl(cleanValue);
     }
   };
 
@@ -60,6 +72,7 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
       <form id="url-form" onSubmit={handleSubmit} className="mb-4">
         <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
           <div className="flex-grow relative">
+            {/* Protocol prefix for desktop */}
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <div className="flex items-center gap-1">
                 <svg className="h-4 w-4 md:h-5 md:w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -69,25 +82,26 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
                 <span className="hidden sm:inline text-xs text-gray-400 font-mono">https://</span>
               </div>
             </div>
+            
+            {/* Protocol prefix for mobile */}
             <div className="sm:hidden absolute inset-y-0 left-8 flex items-center pointer-events-none">
               <span className="text-xs text-gray-400 font-mono">https://</span>
             </div>
+            
             <Input
-              type="url"
+              ref={inputRef}
+              type="text" 
               id="url-input"
               placeholder="example.com"
               className="pl-20 sm:pl-24 text-sm md:text-base h-10 md:h-11 tap-target"
-              value={url.replace(/^https?:\/\//, '')}
-              onChange={(e) => {
-                // Store without the protocol
-                setUrl(e.target.value.replace(/^https?:\/\//, ''));
-                if (error) validateUrl(e.target.value);
-              }}
+              value={url}
+              onChange={handleInputChange}
               required
-              pattern="[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+"
+              aria-label="Website URL"
               title="Enter a valid domain, for example: example.com"
             />
           </div>
+          
           <Button 
             type="submit" 
             className="gap-2 h-10 md:h-11 tap-target"
@@ -97,6 +111,7 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
             <Search className="h-3.5 w-3.5 md:h-4 md:w-4" />
           </Button>
         </div>
+        
         {error && <p className="mt-2 text-destructive text-xs md:text-sm">{error}</p>}
       </form>
       
