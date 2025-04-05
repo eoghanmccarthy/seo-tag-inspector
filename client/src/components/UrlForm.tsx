@@ -30,10 +30,8 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
       return false;
     }
     
-    // Remove protocol if present for domain check
-    const domainPart = protocolCheck.test(value) 
-      ? value.replace(protocolCheck, '')
-      : value;
+    // Always remove protocol for domain check since our UI now handles it
+    const domainPart = value.replace(protocolCheck, '');
     
     // Simple check if it has a valid TLD pattern
     if (!basicDomainCheck.test(domainPart)) {
@@ -49,10 +47,9 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
     e.preventDefault();
     
     if (validateUrl(url)) {
-      // Automatically prepend https:// if not already present
-      const formattedUrl = url.startsWith('http://') || url.startsWith('https://') 
-        ? url 
-        : `https://${url}`;
+      // Since we're storing the URL without protocol in state and displaying https:// in the UI,
+      // we now always prepend https://
+      const formattedUrl = `https://${url.replace(/^https?:\/\//, '')}`;
       
       onAnalyze(formattedUrl);
     }
@@ -63,23 +60,32 @@ export default function UrlForm({ onAnalyze, recentUrls, onRecentUrlClick, isLoa
       <form id="url-form" onSubmit={handleSubmit} className="mb-4">
         <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
           <div className="flex-grow relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-4 w-4 md:h-5 md:w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z" />
-                <path d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z" />
-              </svg>
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <div className="flex items-center gap-1">
+                <svg className="h-4 w-4 md:h-5 md:w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z" />
+                  <path d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z" />
+                </svg>
+                <span className="hidden sm:inline text-xs text-gray-400 font-mono">https://</span>
+              </div>
+            </div>
+            <div className="sm:hidden absolute inset-y-0 left-8 flex items-center pointer-events-none">
+              <span className="text-xs text-gray-400 font-mono">https://</span>
             </div>
             <Input
-              type="text"
+              type="url"
               id="url-input"
               placeholder="example.com"
-              className="pl-10 text-sm md:text-base h-10 md:h-11 tap-target"
-              value={url}
+              className="pl-20 sm:pl-24 text-sm md:text-base h-10 md:h-11 tap-target"
+              value={url.replace(/^https?:\/\//, '')}
               onChange={(e) => {
-                setUrl(e.target.value);
+                // Store without the protocol
+                setUrl(e.target.value.replace(/^https?:\/\//, ''));
                 if (error) validateUrl(e.target.value);
               }}
               required
+              pattern="[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+"
+              title="Enter a valid domain, for example: example.com"
             />
           </div>
           <Button 
