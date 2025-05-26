@@ -2,8 +2,6 @@
 
 A powerful, visual tool that analyzes and visualizes SEO meta tags from any website with Google and social media previews.
 
-![SEO Meta Tag Analyzer Screenshot](https://i.imgur.com/5LR5JLc.png)
-
 ## 🚀 Features
 
 - **Instant SEO Analysis**: Enter any URL to get immediate SEO insights
