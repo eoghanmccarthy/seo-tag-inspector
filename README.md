@@ -63,15 +63,6 @@ project/
     └── schema.ts         # Data schema definitions
 ```
 
-## 🧩 Key Components
-
-- **UrlForm**: Input component for entering website URLs
-- **SeoScoreOverview**: Visual representation of overall SEO score
-- **TabNavigation**: Tab interface for different analysis views
-- **MetaTagsTab**: Detailed view of all meta tags
-- **PreviewsTab**: Google and social media preview representations
-- **RecommendationsTab**: Actionable recommendations for SEO improvement
-
 ## 🚀 Getting Started
 
 1. Clone the repository
